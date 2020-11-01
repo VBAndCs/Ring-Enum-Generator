@@ -395,7 +395,7 @@ X = x + FileState.Hidden
 ? x.ToString(" | ") #ReadOnly | Hidden
 x = X.ToggleFlag(FileState.ReadOnly) + FileState.System
 ? x.Text #Hidden+System
-if x = ileState.ReadOnly 
+if x = FileState.ReadOnly 
    ? "ReadOnly"
 end
 
