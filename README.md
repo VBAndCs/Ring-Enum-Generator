@@ -388,7 +388,7 @@ Class FileStateType
 ```
 
 You can use it like this:
-```
+```ring
 x = FileState.ReadOnly
 ? x.Text #ReadOnly 
 X = x + FileState.Hidden
