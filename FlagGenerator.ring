@@ -4,8 +4,7 @@
 
 
 # ====== Usage Sample =========
-? = GenerateFlag("FileState", ["ReadOnly", "Hidden", "System"])
-
+? GenerateFlag("FileState", ["ReadOnly", "Hidden", "System"])
 # ==============================
 
 func GenerateFlag(FlagName, lstFlags)
@@ -24,12 +23,12 @@ load "FlagOperations.ring"
 
 Class %FlagName%Flags
     MaxValue = %MaxValue%
-%Flags%
-    None = New FlagOperations("None", 0, MaxValue)
-    All = New FlagOperations("All", MaxValue, MaxValue)
-    Flags = [%FlagList%]
     FlagNames = [%StrFlagList%]
     FlagValues = [%ValueList%]
+%Flags%
+    None = New FlagOperations("None", 0, MaxValue, FlagNames)
+    All = New FlagOperations("All", MaxValue, MaxValue, FlagNames)
+    Flags = [%FlagList%]
 '
 
 #============eval=================
@@ -48,7 +47,7 @@ Class %FlagName%Flags
      flag = '"' + lstFlags[i] + '"'
      value = pow(2, i - 1)
 
-     sFlags += "    " + lstFlags[i] + " = New FlagOperations(" + flag + ", " + value + ", MaxValue)" + nl
+     sFlags += "    " + lstFlags[i] + " = New FlagOperations(" + flag + ", " + value + ", MaxValue, FlagNames)" + nl
      If Len(sFlagList) > 0
         sFlagList += ", "
         sStrFlagList += ", "
