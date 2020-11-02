@@ -102,22 +102,21 @@ I also created a function named [GenerateFlag](FlagGenerator.ring) to generate t
  This will show the Generated FileState flag in the output window, which will be: 
 
 ```ring
-load "FlagType.ring"
+load "FlagOperations.ring"
 
 FileState = new FileStateFlags
 
 Class FileStateFlags
     MaxValue = 7
-    ReadOnly = New FlagType("ReadOnly", 1, MaxValue)
-    Hidden = New FlagType("Hidden", 2, MaxValue)
-    System = New FlagType("System", 4, MaxValue)
-
-    None = New FlagType("None", 0, MaxValue)
-    All = New FlagType("All", MaxValue, MaxValue)
-    Flags = [ReadOnly, Hidden, System]
     FlagNames = ["ReadOnly", "Hidden", "System"]
     FlagValues = [1, 2, 4]
-End
+    ReadOnly = New FlagOperations("ReadOnly", 1, MaxValue, FlagNames)
+    Hidden = New FlagOperations("Hidden", 2, MaxValue, FlagNames)
+    System = New FlagOperations("System", 4, MaxValue, FlagNames)
+
+    None = New FlagOperations("None", 0, MaxValue, FlagNames)
+    All = New FlagOperations("All", MaxValue, MaxValue, FlagNames)
+    Flags = [ReadOnly, Hidden, System]
 ```
 
 You can copy this code to a new file and name it `FileState.ring` for example. 
