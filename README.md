@@ -94,301 +94,37 @@ x = GenerateEnum("Alignment", [
 ```
 
 # Flag Generator:
-A flag is an enum with values of power of 2 (1, 2, 4, ....) represinting boolean flags that can be can be used to efficiently store a collection of boolean values. This requires some methods to set, unset and get the value of any individual flag in the collection, besides some overloaded operators to do the same tasks using the language operators like `+, -, &, |, ^, ~, =, !=, > ... etc`.
-I created a function named `GenerateFlag` in the file `FlagGenerator.ring`, to generate the flag and its methods for you. You can use it like this:
+A flag is an enum whitch members values are of power of 2 (1, 2, 4, ....), represinting binary flags that can be used to efficiently store a collection of boolean values. This requires some methods to set, unset and get the value of any individual flag in the collection, besides some overloaded operators to do the same tasks using the language operators like `+, -, &, |, ^, ~, =, !=, > ... etc`. I created the [FlagType class](FlagType.bin) that conatains all these methods and operators. In fact you will not directly use this class, and will not deal with it unless you want to modify it.
+I also created a function named [GenerateFlag](FlagGenerator.ring) to generate the required flag values as objects of the FlagType Class. Use this function like this:
 ```ring
 ? GenerateFlag("FileState", ["ReadOnly", "Hidden", "System"])
 ```
- This will show the Generated FileState flag in the output window, where you can caopy and paste it anywhere you like.
- 
-This is the generated code:
+ This will show the Generated FileState flag in the output window, which will be: 
 
 ```ring
+load "FlagType.ring"
 
 FileState = new FileStateFlags
 
 Class FileStateFlags
     MaxValue = 7
-    ReadOnly = New FileStateType("ReadOnly", 1)
-    Hidden = New FileStateType("Hidden", 2)
-    System = New FileStateType("System", 4)
+    ReadOnly = New FlagType("ReadOnly", 1, MaxValue)
+    Hidden = New FlagType("Hidden", 2, MaxValue)
+    System = New FlagType("System", 4, MaxValue)
 
-    None = New FileStateType("None", 0)
-    All = New FileStateType("All", MaxValue)
+    None = New FlagType("None", 0, MaxValue)
+    All = New FlagType("All", MaxValue, MaxValue)
     Flags = [ReadOnly, Hidden, System]
     FlagNames = ["ReadOnly", "Hidden", "System"]
     FlagValues = [1, 2, 4]
-
-Class FileStateType
-    Name = "None"
-    OnFlags
-    OffFlags
-    MaxValue = 7
-    Value = 0
-    Text
-
-    func init(flagName, v)
-        Name = flagName
-        If v > MaxValue 
-           Value = v & MaxValue
-        else
-           Value = v   
-        end
-
-
-    func SetValue()
-         raise "Value Is Read Only"
-
-    func GetOnFlags()
-       lstFlags = []
-       For flag In FileState.Flags
-           If (Value & flag.Value) > 0 
-              lstFlags + flag
-           end
-       Next
-       Return lstFlags
-
-    func SetOnFlags(lstFlags)
-       SetFlags(lstFlags)
-
-    func GetOffFlags()
-       lstFlags = []
-       For flag In FileState.Flags
-           If (Value & flag.Value) = 0 
-              lstFlags + flag
-           end
-       Next
-       Return lstFlags
-
-    func SetOffFlags(lstFlags)
-       UnsetFlags(lstFlags)
-
-    func GetText()
-         return ToString("")
-
-    func SetText()
-         raise("Text is read only.")
-
-    Func ToString(Separator)
-        If Value = 0 Return FileState.None.Name end
-        If Value = MaxValue Return FileState.All.Name end
-
-        If Separator = ""
-           Separator = "+"
-        End
-
-        sb = ""
-        For flag In FileState.Flags
-            If (Value & flag.Value) > 0
-                If len(sb) > 0
-                   sb += Separator
-                end
-                sb += flag.Name
-            End
-        Next
-        Return sb
-
-    Func ToInteger()
-        Return Value
-
-    Func SetFlag(flag)
-        if type(flag) = "OBJECT" 
-           v = flag.Value
-        else
-           v = flag
-        end
-        Return new FileStateType("", Value | v)
-
-    Func SetFlags(flags)
-        if type(flags) = "OBJECT" 
-           Return new FileStateType("", Value | flags.Value)
-        elseIf isNull(flags) Or len(flags) = 0 
-           Return new FileStateType("", Value) 
-        end
-
-        v = Value
-        For flag In Flags
-            v = v | flag.Value
-        Next
-        Return new FileStateType("", v)
-
-    Func SetAllExcxept(flags)
-        if type(flags) = "OBJECT" 
-           Return new FileStateType("", MaxValue - flags.Value)
-        elseIf isNull(flags) Or len(flags) = 0 
-           Return new FileStateType("", Value)
-        end
-
-        v = MaxValue
-        For flag In Flags
-            v -= flag.Value
-        Next
-
-        Return new FileStateType("", v)
-
-    Func UnsetFlag(flag)
-        if type(flag) = "OBJECT" 
-           v = flag.Value
-        else
-           v = flag
-        end
-        Return new FileStateType("", Value & (Maxvalue - v))
-
-    Func UnsetFlags(flags)
-        if type(flags) = "OBJECT" 
-           Return new FileStateType("", Value & (MaxValie - flags.Value))
-        elseIf isNull(flags) Or len(flags) = 0
-           Return new FileStateType("", Value)
-        end
-
-        v = Value
-        For flag In Flags
-            v = v & (MaxValue - flag.Value)
-        Next
-        Return new FileStateType("", v)
-
-    Func UnsetAllExcxept(flags)
-        if type(flags) = "OBJECT" 
-           Return flags
-        elseIf isNull(flags) Or len(flags) = 0
-           Return new FileStateType("", Value)
-        end
-
-        v = 0
-        For flag In Flags
-            v += flag.Value
-        Next
-        Return new FileStateType("", v)
-
-    Func ToggleFlag(flag)
-        if type(flag) = "OBJECT" 
-           v = flag.Value
-        else
-           v = flag
-        end
-        Return new FileStateType("", Value ^ v)
-
-    Func ToggleFlags(flags)
-        if type(flags) = "OBJECT" 
-           Return new FileStateType("", Value ^ flags.Value)
-        elseIf isNull(flags) Or len(flags) = 0 
-           Return new FileStateType("", Value)
-        end
-
-        v = Value
-        For flag In Flags
-            v = v ^ flag.Value
-        Next
-        Return new FileStateType("", v)
-
-    Func ToggleAll()
-        Return new FileStateType("", Value ^ MaxValue)
-
-    Func IsSet(flag)
-        if type(flag) = "OBJECT" 
-           v = flag.Value
-        else
-           v = flag
-        end
-        Return (Value & v) > 0
-
-    Func AreAllSet(flags)
-        if type(flags) = "OBJECT" 
-           Return (Value & flags.Value) > 0
-        elseIf isNull(flags) Or len(flags) = 0 
-           Return Value = MaxValue
-        end
-
-        For flag In Flags
-            If (Value & flag.Value) = 0 Return False end
-        Next
-        Return True
-
-    Func IsUnset(flag)
-        if type(flag) = "OBJECT" 
-           v = flag.Value
-        else
-           v = flag
-        end
-        Return (Value & v) = 0
-
-    Func AreAllUnset(flags)
-        if type(flags) = "OBJECT" 
-           Return (Value & flags.Value) = 0
-        elseIf isNull(flags) Or len(flags) = 0
-           Return Value = 0
-        end
-
-        For flag In Flags
-            If (Value & flag.Value) > 0 Return False end
-        Next
-        Return True
-
-    Func IsAnySet(flags)
-        if type(flags) = "OBJECT" 
-           Return (Value & flags.Value) > 0
-        elseIf isNull(flags) Or len(flags) = 0 
-           Return Value > 0
-        end
-
-        For flag In Flags
-            If (Value & flag.Value) > 0 Return True end
-        Next
-        Return False
-
-    Func IsAnyUnset(flags)
-        if type(flags) = "OBJECT" 
-           Return (Value & flags.Value) = 0
-        elseIf isNull(flags) Or len(flags) = 0 Then 
-           Return Value < MaxValue 
-        end
-
-        For flag In Flags
-            If (Value & flag.Value) = 0 Return True end
-        Next
-        Return False
-
-
-	func operator(op, flag)
-      v = 0
-      if type(flag) = "OBJECT" and ClassName(flag) = lower("FileStatetype")
-         v = flag.Value
-      else
-         v = flag
-      end
-
-	   switch op 
-	     case "[]"
-           Return (Value & v) > 0
-	     case "&"
-           Return new FileStateType("", Value & v)
-	     case "|"
-           Return new FileStateType("", Value | v)
-	     case "+"
-           Return new FileStateType("", Value | v)
-	     case "-"
-           Return new FileStateType("", Value & (Maxvalue - v))
-	     case "^"
-           Return new FileStateType("", Value ^ v)
-	     case "~"
-           Return new FileStateType("", MaxValue - Value)
-	     case "="
-           Return Value = v
-	     case "!="
-           Return Value != v
-	     case ">"
-           Return Value > v
-	     case ">="
-           Return Value >= v
-	     case "<"
-           Return Value < v
-	     case "<="
-           Return Value <= v
-	   end
+End
 ```
 
-You can use it like this:
+You can copy this code to a new file and name it `FileState.ring` for example. 
+Note that for the `load "FlagType.ring"` statement to work, you need to copy the file `Flagtype.ring` to the folder `ring\bin`. This will make it available to use in all your ring projects. 
+Now you can use the FileState fals like this:
 ```ring
+load "FileState.ring"
 x = FileState.ReadOnly
 ? x.Text                                #ReadOnly 
 X = x + FileState.Hidden
