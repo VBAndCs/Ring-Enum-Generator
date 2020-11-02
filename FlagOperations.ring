@@ -1,3 +1,7 @@
+# Enum generator 
+# Mohammad Hamdy Ghanem
+# 1/11/2020
+
 # Don't forget to copy This file to the folder Ring\Bin
 
 Class FlagOperations
