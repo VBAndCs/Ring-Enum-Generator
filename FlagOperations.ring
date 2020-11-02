@@ -32,7 +32,7 @@ Class FlagOperations
            flag = pow(2, i)
            if flag > maxValue exit end
            If (Value & flag) > 0 
-              lstFlags + new FlagOperations("", flag, MaxValue)
+              lstFlags + (i + 1)
            end
        Next
        Return lstFlags
@@ -46,7 +46,7 @@ Class FlagOperations
            flag = pow(2, i)
            if flag > maxValue exit end
            If (Value & flag) = 0 
-              lstFlags + new FlagOperations("", flag, MaxValue)
+              lstFlags + (i + 1)
            end
        Next
        Return lstFlags
