@@ -28,9 +28,11 @@ Class FlagOperations
 
     func GetOnFlags()
        lstFlags = []
-       For flag In FileState.Flags
-           If (Value & flag.Value) > 0 
-              lstFlags + flag
+       For i = 0 to MaxValue 
+           flag = pow(2, i)
+           if flag > maxValue exit end
+           If (Value & flag) > 0 
+              lstFlags + new FlagOperations("", flag, MaxValue)
            end
        Next
        Return lstFlags
@@ -40,9 +42,11 @@ Class FlagOperations
 
     func GetOffFlags()
        lstFlags = []
-       For flag In FileState.Flags
-           If (Value & flag.Value) = 0 
-              lstFlags + flag
+       For i = 0 to MaxValue 
+           flag = pow(2, i)
+           if flag > maxValue exit end
+           If (Value & flag) = 0 
+              lstFlags + new FlagOperations("", flag, MaxValue)
            end
        Next
        Return lstFlags
