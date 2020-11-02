@@ -4,10 +4,7 @@
 
 
 # ====== Usage Sample =========
-x = GenerateFlag("FileState", ["ReadOnly", "Hidden", "System"])
-
-? x
-
+? = GenerateFlag("FileState", ["ReadOnly", "Hidden", "System"])
 
 # ==============================
 
