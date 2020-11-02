@@ -390,12 +390,12 @@ Class FileStateType
 You can use it like this:
 ```ring
 x = FileState.ReadOnly
-? x.Text #ReadOnly 
+? x.Text                                #ReadOnly 
 X = x + FileState.Hidden
-? x.ToString(" | ") #ReadOnly | Hidden
+? x.ToString(" | ")                     #ReadOnly | Hidden
 x = X.ToggleFlag(FileState.ReadOnly) + FileState.System
-? x.Text #Hidden+System
-if x = FileState.ReadOnly 
+? x.Text                                #Hidden+System
+if x = FileState.ReadOnly               #False
    ? "ReadOnly"
 end
 
@@ -415,6 +415,24 @@ x = x.UnsetFlag(FileState.System)
 
 Note that the flag is immutable, and all methods and operator return a new Flag holding the result, without affecting the original Flag.
 
+Note also that if you will use the flag members multiple times un thee same code block, you can use this simple trick to shorten the name of the flag:
+```ring
+FileState {
+   x = ReadOnly
+   ? x.Text                             #ReadOnly 
+   X = x + Hidden
+   ? x.ToString(" | ")                  #ReadOnly | Hidden
+   x = X.ToggleFlag(ReadOnly) + System
+   ? x.Text                             #Hidden+System
+   if x = ReadOnly {? "ReadOnly"}
+   if x.AreAllSet([Hidden, System]) {? "Hidden+System"}
+   # Alternative syntax
+   if x.IsSet(Hidden + System) {? "Hidden+System"}
+   x = x  - System
+   # Alternative syntax 
+   x = x.UnsetFlag(System)
+}
+```
 
 # To Do:
 Personally, I wish someone can add a command in the Ring Notepad that shows a window with a textbox (to enter the enum name) , a table grid with two columns to enter names and values, and an OK button that calls the ` GenerateEnum` function to generate the class and show a save file dialogue to let the user choose the name and the location to save the class. Finally, the editor should add a `Load "[enumfile].ring" ` statement at the beginning of the current file opened in ring. Ot maybe we can let this option up to the user (by adding a check box to the enum generation window).
