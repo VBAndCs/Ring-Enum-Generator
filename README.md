@@ -115,7 +115,7 @@ Class FileStateFlags
     System = New FlagOperations(4, FlagNames)
 
     None = New FlagOperations(0, FlagNames)
-    All = New FlagOperations(MaxValue, FlagNames)
+    All = New FlagOperations(7, FlagNames)
     Flags = [ReadOnly, Hidden, System]
 
     func FlagFromInt(value)
