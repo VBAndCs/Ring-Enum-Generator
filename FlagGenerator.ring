@@ -26,7 +26,7 @@ Class %FlagName%Flags
     FlagValues = [%ValueList%]
 %Flags%
     None = New FlagOperations(0, FlagNames)
-    All = New FlagOperations(MaxValue, FlagNames)
+    All = New FlagOperations(%MaxValue%, FlagNames)
     Flags = [%FlagList%]
 
     func FlagFromInt(value)
