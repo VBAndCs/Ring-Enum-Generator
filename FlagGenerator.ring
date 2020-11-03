@@ -26,9 +26,12 @@ Class %FlagName%Flags
     FlagNames = [%StrFlagList%]
     FlagValues = [%ValueList%]
 %Flags%
-    None = New FlagOperations("None", 0, MaxValue, FlagNames)
-    All = New FlagOperations("All", MaxValue, MaxValue, FlagNames)
+    None = New FlagOperations(0, MaxValue, FlagNames)
+    All = New FlagOperations(MaxValue, MaxValue, FlagNames)
     Flags = [%FlagList%]
+
+    func FlagFromInt(value)
+       return New FlagOperations(value, MaxValue, FlagNames)
 '
 
 #============eval=================
@@ -47,7 +50,7 @@ Class %FlagName%Flags
      flag = '"' + lstFlags[i] + '"'
      value = pow(2, i - 1)
 
-     sFlags += "    " + lstFlags[i] + " = New FlagOperations(" + flag + ", " + value + ", MaxValue, FlagNames)" + nl
+     sFlags += "    " + lstFlags[i] + " = New FlagOperations(" + value + ", MaxValue, FlagNames)" + nl
      If Len(sFlagList) > 0
         sFlagList += ", "
         sStrFlagList += ", "
