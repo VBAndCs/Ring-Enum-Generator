@@ -102,24 +102,24 @@ I also created a function named [GenerateFlag](FlagGenerator.ring) to generate t
  This will show the Generated FileState flag in the output window, which will be: 
 
 ```ring
+
 load "FlagOperations.ring"
 
 FileState = new FileStateFlags
 
 Class FileStateFlags
-    MaxValue = 7
     FlagNames = ["ReadOnly", "Hidden", "System"]
     FlagValues = [1, 2, 4]
-    ReadOnly = New FlagOperations(1, MaxValue, FlagNames)
-    Hidden = New FlagOperations(2, MaxValue, FlagNames)
-    System = New FlagOperations(4, MaxValue, FlagNames)
+    ReadOnly = New FlagOperations(1, FlagNames)
+    Hidden = New FlagOperations(2, FlagNames)
+    System = New FlagOperations(4, FlagNames)
 
-    None = New FlagOperations(0, MaxValue, FlagNames)
-    All = New FlagOperations(MaxValue, MaxValue, FlagNames)
+    None = New FlagOperations(0, FlagNames)
+    All = New FlagOperations(MaxValue, FlagNames)
     Flags = [ReadOnly, Hidden, System]
-    
+
     func FlagFromInt(value)
-       return New FlagOperations(value, MaxValue, FlagNames)
+       return New FlagOperations(value, FlagNames)
 ```
 
 You can copy this code to a new file and name it `FileState.ring` for example. 
