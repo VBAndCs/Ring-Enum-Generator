@@ -110,13 +110,16 @@ Class FileStateFlags
     MaxValue = 7
     FlagNames = ["ReadOnly", "Hidden", "System"]
     FlagValues = [1, 2, 4]
-    ReadOnly = New FlagOperations("ReadOnly", 1, MaxValue, FlagNames)
-    Hidden = New FlagOperations("Hidden", 2, MaxValue, FlagNames)
-    System = New FlagOperations("System", 4, MaxValue, FlagNames)
+    ReadOnly = New FlagOperations(1, MaxValue, FlagNames)
+    Hidden = New FlagOperations(2, MaxValue, FlagNames)
+    System = New FlagOperations(4, MaxValue, FlagNames)
 
-    None = New FlagOperations("None", 0, MaxValue, FlagNames)
-    All = New FlagOperations("All", MaxValue, MaxValue, FlagNames)
+    None = New FlagOperations(0, MaxValue, FlagNames)
+    All = New FlagOperations(MaxValue, MaxValue, FlagNames)
     Flags = [ReadOnly, Hidden, System]
+    
+    func FlagFromInt(value)
+       return New FlagOperations(value, MaxValue, FlagNames)
 ```
 
 You can copy this code to a new file and name it `FileState.ring` for example. 
@@ -146,6 +149,8 @@ end
 x = x  - FileState.System
 # Alternative syntax 
 x = x.UnsetFlag(FileState.System)
+x = FileState.FlagFromInt(3) 
+? x.Text                                 # ReadOnly+Hidden
 ```
 
 Note that the flag is immutable, and all methods and operator return a new Flag holding the result, without affecting the original Flag.
@@ -166,6 +171,8 @@ FileState {
    x = x  - System
    # Alternative syntax 
    x = x.UnsetFlag(System)
+   x = FlagFromInt(3) 
+   ? x.Text                              #ReadOnly+Hidden   
 }
 ```
 
