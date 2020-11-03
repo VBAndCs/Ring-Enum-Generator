@@ -5,8 +5,7 @@
 # Don't forget to copy This file to the folder Ring\Bin
 
 Class FlagOperations
-    Value = 0
-    Name = "None"
+    Value
     MaxValue
     Text
     AllNames
@@ -14,14 +13,13 @@ Class FlagOperations
     OffFlags
 
 
-    func init(flagName, v, max, names)
-        Name = flagName
+    func init(flagValue, max, names)
         AllNames = names
         MaxValue = max
-        If v > MaxValue 
-           Value = v & MaxValue
+        If flagValue > MaxValue 
+           Value = flagValue & MaxValue
         else
-           Value = v   
+           Value = flagValue   
         end
 
     func SetValue()
@@ -36,7 +34,7 @@ Class FlagOperations
        For i = 1 to n
            flag = pow(2, i - 1)
            If (Value & flag) > 0 
-              lstFlags + new FlagOperations(AllNames[i], flag, MaxValue, AllNames)
+              lstFlags + new FlagOperations(flag, MaxValue, AllNames)
            end
        Next
        Return lstFlags
@@ -50,7 +48,7 @@ Class FlagOperations
        For i = 1 to n
            flag = pow(2, i - 1)
            If (Value & flag) = 0 
-              lstFlags + new FlagOperations(AllNames[i], flag, MaxValue, AllNames)
+              lstFlags + new FlagOperations(flag, MaxValue, AllNames)
            end
        Next
        Return lstFlags
@@ -94,26 +92,26 @@ Class FlagOperations
         else
            v = flag
         end
-        Return new FlagOperations("", Value | v, MaxValue, AllNames)
+        Return new FlagOperations(Value | v, MaxValue, AllNames)
 
     Func SetFlags(flags)
         if type(flags) = "OBJECT" 
-           Return new FlagOperations("", Value | flags.Value, MaxValue, AllNames)
+           Return new FlagOperations(Value | flags.Value, MaxValue, AllNames)
         elseIf isNull(flags) Or len(flags) = 0 
-           Return new FlagOperations("", Value, MaxValue, AllNames) 
+           Return new FlagOperations(Value, MaxValue, AllNames) 
         end
 
         v = Value
         For flag In Flags
             v = v | flag.Value
         Next
-        Return new FlagOperations("", v, MaxValue, AllNames)
+        Return new FlagOperations(v, MaxValue, AllNames)
 
     Func SetAllExcxept(flags)
         if type(flags) = "OBJECT" 
-           Return new FlagOperations("", MaxValue - flags.Value, MaxValue, AllNames)
+           Return new FlagOperations(MaxValue - flags.Value, MaxValue, AllNames)
         elseIf isNull(flags) Or len(flags) = 0 
-           Return new FlagOperations("", Value, MaxValue, AllNames)
+           Return new FlagOperations(Value, MaxValue, AllNames)
         end
 
         v = MaxValue
@@ -121,7 +119,7 @@ Class FlagOperations
             v -= flag.Value
         Next
 
-        Return new FlagOperations("", v, MaxValue, AllNames)
+        Return new FlagOperations(v, MaxValue, AllNames)
 
     Func UnsetFlag(flag)
         if type(flag) = "OBJECT" 
@@ -129,33 +127,33 @@ Class FlagOperations
         else
            v = flag
         end
-        Return new FlagOperations("", Value & (Maxvalue - v) , MaxValue, AllNames)
+        Return new FlagOperations(Value & (Maxvalue - v) , MaxValue, AllNames)
 
     Func UnsetFlags(flags)
         if type(flags) = "OBJECT" 
-           Return new FlagOperations("", Value & (MaxValie - flags.Value) , MaxValue, AllNames)
+           Return new FlagOperations(Value & (MaxValie - flags.Value) , MaxValue, AllNames)
         elseIf isNull(flags) Or len(flags) = 0
-           Return new FlagOperations("", Value, MaxValue, AllNames)
+           Return new FlagOperations(Value, MaxValue, AllNames)
         end
 
         v = Value
         For flag In Flags
             v = v & (MaxValue - flag.Value)
         Next
-        Return new FlagOperations("", v, MaxValue, AllNames)
+        Return new FlagOperations(v, MaxValue, AllNames)
 
     Func UnsetAllExcxept(flags)
         if type(flags) = "OBJECT" 
            Return flags
         elseIf isNull(flags) Or len(flags) = 0
-           Return new FlagOperations("", Value, MaxValue, AllNames)
+           Return new FlagOperations(Value, MaxValue, AllNames)
         end
 
         v = 0
         For flag In Flags
             v += flag.Value
         Next
-        Return new FlagOperations("", v, MaxValue, AllNames)
+        Return new FlagOperations(v, MaxValue, AllNames)
 
     Func ToggleFlag(flag)
         if type(flag) = "OBJECT" 
@@ -163,23 +161,23 @@ Class FlagOperations
         else
            v = flag
         end
-        Return new FlagOperations("", Value ^ v, MaxValue, AllNames)
+        Return new FlagOperations(Value ^ v, MaxValue, AllNames)
 
     Func ToggleFlags(flags)
         if type(flags) = "OBJECT" 
-           Return new FlagOperations("", Value ^ flags.Value, MaxValue, AllNames)
+           Return new FlagOperations(Value ^ flags.Value, MaxValue, AllNames)
         elseIf isNull(flags) Or len(flags) = 0 
-           Return new FlagOperations("", Value, MaxValue, AllNames)
+           Return new FlagOperations(Value, MaxValue, AllNames)
         end
 
         v = Value
         For flag In Flags
             v = v ^ flag.Value
         Next
-        Return new FlagOperations("", v, MaxValue, AllNames)
+        Return new FlagOperations(v, MaxValue, AllNames)
 
     Func ToggleAll()
-        Return new FlagOperations("", Value ^ MaxValue, MaxValue, AllNames)
+        Return new FlagOperations(Value ^ MaxValue, MaxValue, AllNames)
 
     Func IsSet(flag)
         if type(flag) = "OBJECT" 
@@ -258,17 +256,17 @@ Class FlagOperations
 	     case "[]"
            Return (Value & v) > 0
 	     case "&"
-           Return new FlagOperations("", Value & v, MaxValue, AllNames)
+           Return new FlagOperations(Value & v, MaxValue, AllNames)
 	     case "|"
-           Return new FlagOperations("", Value | v, MaxValue, AllNames)
+           Return new FlagOperations(Value | v, MaxValue, AllNames)
 	     case "+"
-           Return new FlagOperations("", Value | v, MaxValue, AllNames)
+           Return new FlagOperations(Value | v, MaxValue, AllNames)
 	     case "-"
-           Return new FlagOperations("", Value & (Maxvalue - v) , MaxValue, AllNames)
+           Return new FlagOperations(Value & (Maxvalue - v) , MaxValue, AllNames)
 	     case "^"
-           Return new FlagOperations("", Value ^ v, MaxValue, AllNames)
+           Return new FlagOperations(Value ^ v, MaxValue, AllNames)
 	     case "~"
-           Return new FlagOperations("", MaxValue - Value, MaxValue, AllNames)
+           Return new FlagOperations(MaxValue - Value, MaxValue, AllNames)
 	     case "="
            Return Value = v
 	     case "!="
