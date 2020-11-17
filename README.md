@@ -40,8 +40,13 @@ class AlignmentEnum
    func GetNames()
       return [left, right, center]
 
-   func GetNamedValues()
+   func ToList()
       return [:left = 0, :right = 1, :center = 2]
+      
+private
+   Func Setleft()
+   Func Setright()
+   Func Setcenter()      
 ```
 
 and created a global variable of it:
@@ -54,10 +59,11 @@ x = Alignment.Center
 ```
 
 The additional methods, returns lists that contain the names, values, and named values:
+
 ```ring
 names = Alignment.GetNames()
 values = Alignment.GetValues()
-list = Alignment.GetNamedValues()
+list = Alignment.ToList()
 ```
 
 I found this useful, but it will be hard to write such a class every time I need a 2-value enum!
@@ -83,7 +89,7 @@ x = GenerateEnum("Alignment", [:Left, :Right,:Center])
 ? x
 ```
 
-You can also use string values (but don't use double qutes `"` in the string. Use single quotes instead `'`) like this:
+You can also use string values (but don't use double quotes `"` inside the string literal. Use single quotes instead `'`) like this:
 ```ring
 x = GenerateEnum("Alignment", [
    :Left = "Left align",
