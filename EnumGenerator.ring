@@ -39,8 +39,11 @@ class %EnumName%Enum
    func GetNames()
       return [%names%]
 
-   func GetNamedValues()
+   func ToList()
       return [%list%]
+
+private
+%ReadOnly%
 "
 
 #============eval=================
@@ -49,6 +52,7 @@ class %EnumName%Enum
        names = ""
        values = ""
        list = ""
+       readOnly = ""
 
 	  	 if type(lstEnumValues[1]) != "LIST"
           lstEnumValues = FixEnumList(lstEnumValues)
@@ -64,6 +68,7 @@ class %EnumName%Enum
  
 			  member = v[1] + " = " + value
            members += "   " + member + nl
+           readOnly += "   Func Set" + v[1] + "()" + nl
 
 			  cases += "         case " + value + nl + 
 						  "            return " + v[1] + nl
@@ -85,6 +90,8 @@ class %EnumName%Enum
        enum = subStr(enum, "%names%", names)
        enum = subStr(enum, "%values%", values)
        enum = subStr(enum, "%list%", list)
+       enum = subStr(enum, "%ReadOnly%", readOnly)
+
        return enum
 
 
