@@ -1,4 +1,4 @@
-# Enum generator 
+# Flag generator 
 # Mohammad Hamdy Ghanem
 # 1/11/2020
 
@@ -31,6 +31,11 @@ Class %FlagName%Flags
 
     func FlagFromInt(value)
        return New FlagOperations(value, FlagNames)
+
+Private
+   Func SetNone()
+   Func SetAll()
+%ReadOnly%
 '
 
 #============eval=================
@@ -44,12 +49,15 @@ Class %FlagName%Flags
   sFlagList = ""
   sStrFlagList = ""
   sValueFlagList = ""
+  sReadOnly = ""
 
   For i = 1 To L 
      flag = '"' + lstFlags[i] + '"'
      value = pow(2, i - 1)
 
      sFlags += "    " + lstFlags[i] + " = New FlagOperations(" + value + ", FlagNames)" + nl
+     sReadOnly += "   Func Set" + lstFlags[i] + "()" + nl
+
      If Len(sFlagList) > 0
         sFlagList += ", "
         sStrFlagList += ", "
@@ -63,5 +71,6 @@ Class %FlagName%Flags
   FlagTemplate = SubStr(FlagTemplate, "%FlagList%", sFlagList)
   FlagTemplate = SubStr(FlagTemplate, "%StrFlagList%", sStrFlagList)
   FlagTemplate = SubStr(FlagTemplate, "%ValueList%", sValueFlagList)
+  FlagTemplate = subStr(FlagTemplate, "%ReadOnly%", sReadOnly)
 
   Return FlagTemplate
