@@ -43,7 +43,7 @@ class AlignmentEnum
    func ToList()
       return [:left = 0, :right = 1, :center = 2]
       
-private
+private # Make enum members readonly
    Func Setleft()
    Func Setright()
    Func Setcenter()      
@@ -108,7 +108,6 @@ I also created a function named [GenerateFlag](FlagGenerator.ring) to generate t
  This will show the Generated FileState flag in the output window, which will be: 
 
 ```ring
-
 load "FlagOperations.ring"
 
 FileState = new FileStateFlags
@@ -126,6 +125,13 @@ Class FileStateFlags
 
     func FlagFromInt(value)
        return New FlagOperations(value, FlagNames)
+
+Private # Make flags readonly
+   Func SetNone()
+   Func SetAll()
+   Func SetReadOnly()
+   Func SetHidden()
+   Func SetSystem()
 ```
 
 You can copy this code to a new file and name it `FileState.ring` for example. 
